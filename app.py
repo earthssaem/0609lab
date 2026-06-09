@@ -457,9 +457,24 @@ m = folium.Map(
 
 # ── 레이어 1: 판 경계선 ──────────────────────────
 if show_plates and plates_geojson:
+    # GeoJSON 좌표 전체에 wrap_lons 적용하여 태평양 중심으로 경도 보정
+    import copy
+    plates_wrapped = copy.deepcopy(plates_geojson)
+    for feature in plates_wrapped["features"]:
+        geom = feature["geometry"]
+        if geom["type"] == "LineString":
+            geom["coordinates"] = [
+                [wrap_lons(lon), lat] for lon, lat in geom["coordinates"]
+            ]
+        elif geom["type"] == "MultiLineString":
+            geom["coordinates"] = [
+                [[wrap_lons(lon), lat] for lon, lat in line]
+                for line in geom["coordinates"]
+            ]
+
     plate_layer = folium.FeatureGroup(name="📏 판 경계선", show=True)
     folium.GeoJson(
-        plates_geojson,
+        plates_wrapped,
         name="판 경계선",
         style_function=lambda x: {
             "color": "#f0a500",
