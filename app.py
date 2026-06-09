@@ -290,7 +290,6 @@ with st.sidebar:
         "CartoDB dark_matter",
         "CartoDB positron",
         "OpenStreetMap",
-        "Stamen Terrain",
     ])
 
     st.markdown("---")
@@ -369,12 +368,11 @@ st.markdown("---")
 # 지도 생성
 # ───────────────────────────────────────────────
 
-# 지도 배경 타일 매핑
+# 지도 배경 타일 매핑 (Stamen 계열은 Streamlit Cloud에서 불안정하므로 제외)
 tile_map = {
     "CartoDB dark_matter": "CartoDB dark_matter",
-    "CartoDB positron": "CartoDB positron",
-    "OpenStreetMap": "OpenStreetMap",
-    "Stamen Terrain": "Stamen Terrain",
+    "CartoDB positron":    "CartoDB positron",
+    "OpenStreetMap":       "OpenStreetMap",
 }
 
 m = folium.Map(
@@ -382,6 +380,8 @@ m = folium.Map(
     zoom_start=2,
     tiles=tile_map[map_style],
     prefer_canvas=True,   # 성능 최적화
+    width="100%",
+    height="100%",
 )
 
 # ── 레이어 1: 판 경계선 ──────────────────────────
@@ -455,7 +455,8 @@ folium.LayerControl(collapsed=False).add_to(m)
 # 지도 렌더링
 # ───────────────────────────────────────────────
 
-st_folium(m, width="100%", height=600, returned_objects=[])
+# height를 픽셀 정수로 명시해야 Streamlit Cloud에서 지도가 정상 렌더링됨
+st_folium(m, use_container_width=True, height=580, returned_objects=[])
 
 # ───────────────────────────────────────────────
 # 하단 데이터 테이블 (접을 수 있게)
