@@ -64,9 +64,7 @@ st.markdown("""
         ) !important;
         border-right: 3px solid #8b6914 !important;
     }
-    [data-testid="stSidebar"] { color: #e8dcc8; }
-    /* 범례 색상 점은 예외 처리 */
-    [data-testid="stSidebar"] .legend-dot { color: inherit !important; }
+    [data-testid="stSidebar"] * { color: #e8dcc8 !important; }
     [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
         color: #f0c040 !important;
     }
@@ -356,15 +354,20 @@ with st.sidebar:
     st.markdown("---")
     # 범례
     st.markdown("### 📖 지진 규모 범례")
-    st.markdown("""
-    <div style='font-size:0.85rem; line-height:2.2;'>
-    <span style='color:#4fc3f7; font-size:1.2rem;'>●</span> M3 미만 — 미소지진<br>
-    <span style='color:#aed581; font-size:1.2rem;'>●</span> M3–5 — 약진<br>
-    <span style='color:#ffca28; font-size:1.2rem;'>●</span> M5–6 — 중진<br>
-    <span style='color:#ff7043; font-size:1.2rem;'>●</span> M6–7 — 강진<br>
-    <span style='color:#e53935; font-size:1.2rem;'>●</span> M7 이상 — 대지진
-    </div>
-    """, unsafe_allow_html=True)
+    # 범례: 색상 원과 텍스트를 컬럼으로 분리해서 CSS 간섭 회피
+    legend_items = [
+        ("#4fc3f7", "M3 미만 — 미소지진"),
+        ("#aed581", "M3–5 — 약진"),
+        ("#ffca28", "M5–6 — 중진"),
+        ("#ff7043", "M6–7 — 강진"),
+        ("#e53935", "M7 이상 — 대지진"),
+    ]
+    for color, label in legend_items:
+        c1, c2 = st.columns([1, 6])
+        with c1:
+            st.markdown(f"<p style='color:{color};font-size:1.3rem;margin:0;'>●</p>", unsafe_allow_html=True)
+        with c2:
+            st.markdown(f"<p style='color:#e8dcc8;font-size:0.82rem;margin:4px 0;'>{label}</p>", unsafe_allow_html=True)
 
     st.markdown("---")
     load_btn = st.button("🔄 데이터 새로고침", use_container_width=True)
