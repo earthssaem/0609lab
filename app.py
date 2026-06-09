@@ -332,7 +332,7 @@ with st.sidebar:
         "최근 90일": 90,
         "최근 1년": 365,
     }
-    selected_period = st.selectbox("📅 기간", list(period_options.keys()), index=1,
+    selected_period = st.selectbox("📅 기간", list(period_options.keys()), index=3,
                                    disabled=not show_earthquakes)
     days = period_options[selected_period]
 
