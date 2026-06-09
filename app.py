@@ -8,7 +8,7 @@
 
 import streamlit as st
 import folium
-from streamlit_folium import st_folium
+import streamlit.components.v1 as components  # folium HTML 직접 렌더링용
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
@@ -455,8 +455,9 @@ folium.LayerControl(collapsed=False).add_to(m)
 # 지도 렌더링
 # ───────────────────────────────────────────────
 
-# height를 픽셀 정수로 명시해야 Streamlit Cloud에서 지도가 정상 렌더링됨
-st_folium(m, use_container_width=True, height=580, returned_objects=[])
+# folium 지도를 HTML로 변환 후 iframe으로 렌더링 (Streamlit Cloud 호환성 최대화)
+map_html = m._repr_html_()
+components.html(map_html, height=580, scrolling=False)
 
 # ───────────────────────────────────────────────
 # 하단 데이터 테이블 (접을 수 있게)
