@@ -355,12 +355,17 @@ with st.sidebar:
     # 범례
     st.markdown("### 📖 지진 규모 범례")
     st.markdown("""
-    <div style='font-size:0.82rem; line-height:1.8'>
-    <span style='color:#4fc3f7'>●</span> M3 미만 — 미소지진<br>
-    <span style='color:#aed581'>●</span> M3–5 — 약진<br>
-    <span style='color:#ffca28'>●</span> M5–6 — 중진<br>
-    <span style='color:#ff7043'>●</span> M6–7 — 강진<br>
-    <span style='color:#e53935'>●</span> M7 이상 — 대지진
+    <div style='font-size:0.85rem; line-height:2.0'>
+    <span style='color:#4fc3f7 !important; font-size:1.1rem'>●</span>
+    <span style='color:#e8dcc8 !important'> M3 미만 — 미소지진</span><br>
+    <span style='color:#aed581 !important; font-size:1.1rem'>●</span>
+    <span style='color:#e8dcc8 !important'> M3–5 — 약진</span><br>
+    <span style='color:#ffca28 !important; font-size:1.1rem'>●</span>
+    <span style='color:#e8dcc8 !important'> M5–6 — 중진</span><br>
+    <span style='color:#ff7043 !important; font-size:1.1rem'>●</span>
+    <span style='color:#e8dcc8 !important'> M6–7 — 강진</span><br>
+    <span style='color:#e53935 !important; font-size:1.1rem'>●</span>
+    <span style='color:#e8dcc8 !important'> M7 이상 — 대지진</span>
     </div>
     """, unsafe_allow_html=True)
 
