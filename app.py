@@ -28,56 +28,40 @@ st.set_page_config(
 # ───────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* 전체 배경 */
-    .stApp { background-color: #0d1b2a; color: #e0e8f0; }
+    /* 전체 배경 - 밝은 테마 */
+    .stApp { background-color: #f5f7fa !important; color: #1a1a2e !important; }
 
     /* 사이드바 */
     [data-testid="stSidebar"] {
-        background-color: #112233;
-        border-right: 1px solid #1e3a5f;
+        background-color: #eef1f7 !important;
+        border-right: 1px solid #d0d8e8 !important;
     }
-    [data-testid="stSidebar"] * { color: #c8d8e8 !important; }
 
     /* 헤더 */
-    h1 { color: #f0a500 !important; letter-spacing: 1px; }
-    h2, h3 { color: #7ec8e3 !important; }
+    h1 { color: #c47a00 !important; letter-spacing: 1px; }
+    h2, h3 { color: #1a5276 !important; }
 
-        /* 메트릭 카드 */
+    /* 메트릭 카드 */
     [data-testid="metric-container"] {
-        background: #112233 !important;
-        border: 1px solid #1e3a5f !important;
+        background: #ffffff !important;
+        border: 1px solid #d0d8e8 !important;
         border-radius: 8px !important;
         padding: 12px !important;
-    }
-    [data-testid="metric-container"],
-    [data-testid="metric-container"] *,
-    [data-testid="metric-container"] p,
-    [data-testid="metric-container"] span,
-    [data-testid="metric-container"] div { color: #ffffff !important; }
-    [data-testid="metric-container"] label { color: #7ec8e3 !important; font-size: 0.8rem; }
-    [data-testid="metric-container"] [data-testid="stMetricValue"],
-    [data-testid="metric-container"] [data-testid="stMetricValue"] * {
-        color: #ffffff !important;
-        font-size: 1.6rem !important;
-        font-weight: 700;
-    }
-    [data-testid="metric-container"] label,
-    [data-testid="metric-container"] p {
-        color: #7ec8e3 !important;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
     }
 
     /* 구분선 */
-    hr { border-color: #1e3a5f; }
+    hr { border-color: #d0d8e8; }
 
     /* 정보 박스 */
     .info-box {
-        background: #112233;
-        border-left: 3px solid #f0a500;
+        background: #ffffff;
+        border-left: 3px solid #c47a00;
         border-radius: 4px;
         padding: 10px 14px;
         margin: 8px 0;
         font-size: 0.85rem;
-        color: #c8d8e8;
+        color: #1a1a2e;
     }
 </style>
 """, unsafe_allow_html=True)
