@@ -28,40 +28,96 @@ st.set_page_config(
 # ───────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* 전체 배경 - 밝은 테마 */
-    .stApp { background-color: #f5f7fa !important; color: #1a1a2e !important; }
+    @import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;600;700&display=swap');
 
-    /* 사이드바 */
+    /* 전체 배경 - 양피지/지층 느낌 */
+    .stApp {
+        background-color: #f2ede4 !important;
+        background-image:
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 39px,
+                rgba(180,160,120,0.12) 39px,
+                rgba(180,160,120,0.12) 40px
+            ),
+            repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 39px,
+                rgba(180,160,120,0.08) 39px,
+                rgba(180,160,120,0.08) 40px
+            );
+        color: #2c2416 !important;
+        font-family: 'Geologica', sans-serif !important;
+    }
+
+    /* 사이드바 - 짙은 지층 암석 느낌 */
     [data-testid="stSidebar"] {
-        background-color: #eef1f7 !important;
-        border-right: 1px solid #d0d8e8 !important;
+        background-color: #2a2018 !important;
+        background-image: repeating-linear-gradient(
+            160deg,
+            transparent,
+            transparent 18px,
+            rgba(255,255,255,0.02) 18px,
+            rgba(255,255,255,0.02) 19px
+        ) !important;
+        border-right: 3px solid #8b6914 !important;
+    }
+    [data-testid="stSidebar"] * { color: #e8dcc8 !important; }
+    [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+        color: #f0c040 !important;
     }
 
     /* 헤더 */
-    h1 { color: #c47a00 !important; letter-spacing: 1px; }
-    h2, h3 { color: #1a5276 !important; }
+    h1 {
+        color: #7a3b00 !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase !important;
+        border-bottom: 2px solid #c47a00 !important;
+        padding-bottom: 6px !important;
+    }
+    h2, h3 { color: #5a3a00 !important; }
 
-    /* 메트릭 카드 */
+    /* 메트릭 카드 - 암석 단면 느낌 */
     [data-testid="metric-container"] {
-        background: #ffffff !important;
-        border: 1px solid #d0d8e8 !important;
-        border-radius: 8px !important;
+        background: linear-gradient(135deg, #fffbf2 0%, #f5ead8 100%) !important;
+        border: 1px solid #c8a86a !important;
+        border-left: 4px solid #c47a00 !important;
+        border-radius: 4px !important;
         padding: 12px !important;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
+        box-shadow: 2px 2px 6px rgba(100,70,20,0.15) !important;
     }
 
-    /* 구분선 */
-    hr { border-color: #d0d8e8; }
+    /* 구분선 - 단층선 느낌 */
+    hr {
+        border: none !important;
+        border-top: 2px dashed #c8a86a !important;
+        opacity: 0.6 !important;
+    }
+
+    /* 탭 스타일 */
+    [data-testid="stTabs"] [role="tab"] {
+        color: #5a3a00 !important;
+        font-weight: 600 !important;
+    }
 
     /* 정보 박스 */
     .info-box {
-        background: #ffffff;
-        border-left: 3px solid #c47a00;
-        border-radius: 4px;
+        background: linear-gradient(135deg, #fffbf2, #f5ead8);
+        border-left: 4px solid #c47a00;
+        border-radius: 2px;
         padding: 10px 14px;
         margin: 8px 0;
         font-size: 0.85rem;
-        color: #1a1a2e;
+        color: #2c2416;
+        box-shadow: 1px 1px 4px rgba(100,70,20,0.1);
+    }
+
+    /* 데이터프레임 */
+    [data-testid="stDataFrame"] {
+        border: 1px solid #c8a86a !important;
+        border-radius: 4px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -309,8 +365,10 @@ with st.sidebar:
 
 st.markdown("# 🌋 지진·화산·판 경계 분포도")
 st.markdown(
-    "USGS 실시간 지진 데이터 · Smithsonian GVP 화산 데이터 · "
-    "Peter Bird 판 경계선 데이터를 한 화면에서 비교합니다."
+    """<p style='color:#6b4a1a; font-size:0.95rem; letter-spacing:0.5px;'>
+    📡 USGS 실시간 지진 &nbsp;|&nbsp; 🌋 Smithsonian GVP 화산 &nbsp;|&nbsp; 🗺️ Peter Bird 판 경계선
+    </p>""",
+    unsafe_allow_html=True
 )
 
 # ───────────────────────────────────────────────
@@ -370,7 +428,7 @@ tile_map = {
 }
 
 m = folium.Map(
-    location=[20, 0],
+    location=[20, 180],   # 태평양 중심 — 환태평양 조산대 전체 조망
     zoom_start=2,
     tiles=tile_map[map_style],
     prefer_canvas=True,   # 성능 최적화
