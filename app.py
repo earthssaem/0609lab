@@ -458,9 +458,10 @@ if show_plates and plates_geojson:
 if show_volcanoes:
     volcano_layer = folium.FeatureGroup(name="🔺 화산 분포", show=True)
     for _, row in volcano_df.iterrows():
-        # DivIcon으로 삼각형(▲) 화산 마커 표시 (RegularPolygonMarker는 최신 folium 미지원)
+        # DivIcon으로 삼각형(▲) 화산 마커 표시, 경도 보정으로 태평양 중심 지도에 정확히 표시
+        lon_adj = wrap_lons(row["경도"])
         folium.Marker(
-            location=[row["위도"], row["경도"]],
+            location=[row["위도"], lon_adj],
             icon=folium.DivIcon(
                 html=f"""<div style="
                     font-size:14px;
@@ -481,14 +482,27 @@ if show_volcanoes:
     volcano_layer.add_to(m)
 
 # ── 레이어 3: 지진 분포 ──────────────────────────
+# 태평양 중심 지도를 위해 경도 보정:
+# 아시아/태평양 지역(경도 > 60)은 -360 해서 왼쪽에도 표시
+# 아메리카(경도 < -60)는 +360 해서 오른쪽에도 표시
+def wrap_lons(lon):
+    """태평양 중심(-150) 기준으로 경도를 -330 ~ +30 범위로 정규화"""
+    # 중심 경도 -150 기준, 화면 범위 -150±180 = (-330, +30)
+    while lon > 30:
+        lon -= 360
+    while lon < -330:
+        lon += 360
+    return lon
+
 if show_earthquakes and not eq_df.empty:
     eq_layer = folium.FeatureGroup(name="🔴 지진 분포", show=True)
     for _, row in eq_df.iterrows():
         mag   = row["규모"]
         color = magnitude_color(mag)
         radius = magnitude_radius(mag)
+        lon_adj = wrap_lons(row["경도"])
         folium.CircleMarker(
-            location=[row["위도"], row["경도"]],
+            location=[row["위도"], lon_adj],
             radius=radius,
             color=color,
             fill=True,
