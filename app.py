@@ -297,6 +297,15 @@ def magnitude_radius(mag):
     return max(3, int(mag ** 1.8))
 
 
+def wrap_lons(lon):
+    """태평양 중심(-150) 기준으로 경도를 -330 ~ +30 범위로 정규화"""
+    while lon > 30:
+        lon -= 360
+    while lon < -330:
+        lon += 360
+    return lon
+
+
 # ───────────────────────────────────────────────
 # 사이드바 컨트롤
 # ───────────────────────────────────────────────
@@ -482,18 +491,6 @@ if show_volcanoes:
     volcano_layer.add_to(m)
 
 # ── 레이어 3: 지진 분포 ──────────────────────────
-# 태평양 중심 지도를 위해 경도 보정:
-# 아시아/태평양 지역(경도 > 60)은 -360 해서 왼쪽에도 표시
-# 아메리카(경도 < -60)는 +360 해서 오른쪽에도 표시
-def wrap_lons(lon):
-    """태평양 중심(-150) 기준으로 경도를 -330 ~ +30 범위로 정규화"""
-    # 중심 경도 -150 기준, 화면 범위 -150±180 = (-330, +30)
-    while lon > 30:
-        lon -= 360
-    while lon < -330:
-        lon += 360
-    return lon
-
 if show_earthquakes and not eq_df.empty:
     eq_layer = folium.FeatureGroup(name="🔴 지진 분포", show=True)
     for _, row in eq_df.iterrows():
