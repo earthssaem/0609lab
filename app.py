@@ -50,10 +50,15 @@ st.markdown("""
         padding: 12px;
     }
     [data-testid="metric-container"] label { color: #7ec8e3 !important; font-size: 0.8rem; }
-    [data-testid="metric-container"] [data-testid="stMetricValue"] {
-        color: #f0a500 !important;
+    [data-testid="metric-container"] [data-testid="stMetricValue"],
+    [data-testid="metric-container"] [data-testid="stMetricValue"] * {
+        color: #ffffff !important;
         font-size: 1.6rem !important;
         font-weight: 700;
+    }
+    [data-testid="metric-container"] label,
+    [data-testid="metric-container"] p {
+        color: #7ec8e3 !important;
     }
 
     /* 구분선 */
@@ -380,8 +385,6 @@ m = folium.Map(
     zoom_start=2,
     tiles=tile_map[map_style],
     prefer_canvas=True,   # 성능 최적화
-    width="100%",
-    height="100%",
 )
 
 # ── 레이어 1: 판 경계선 ──────────────────────────
@@ -407,14 +410,19 @@ if show_plates and plates_geojson:
 if show_volcanoes:
     volcano_layer = folium.FeatureGroup(name="🔺 화산 분포", show=True)
     for _, row in volcano_df.iterrows():
-        folium.RegularPolygonMarker(
+        # DivIcon으로 삼각형(▲) 화산 마커 표시 (RegularPolygonMarker는 최신 folium 미지원)
+        folium.Marker(
             location=[row["위도"], row["경도"]],
-            number_of_sides=3,      # 삼각형(▲)으로 화산 표시
-            radius=7,
-            color="#ff6b35",
-            fill=True,
-            fill_color="#ff6b35",
-            fill_opacity=0.85,
+            icon=folium.DivIcon(
+                html=f"""<div style="
+                    font-size:14px;
+                    color:#ff6b35;
+                    text-shadow: 0 0 3px #000;
+                    line-height:1;
+                ">▲</div>""",
+                icon_size=(14, 14),
+                icon_anchor=(7, 14),
+            ),
             tooltip=folium.Tooltip(
                 f"<b>🔺 {row['이름']}</b><br>"
                 f"국가: {row['국가']}<br>"
@@ -456,7 +464,7 @@ folium.LayerControl(collapsed=False).add_to(m)
 # ───────────────────────────────────────────────
 
 # folium 지도를 HTML로 변환 후 iframe으로 렌더링 (Streamlit Cloud 호환성 최대화)
-map_html = m._repr_html_()
+map_html = m.get_root().render()
 components.html(map_html, height=580, scrolling=False)
 
 # ───────────────────────────────────────────────
