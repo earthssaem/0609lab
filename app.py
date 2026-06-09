@@ -295,8 +295,8 @@ def magnitude_color(mag):
 def magnitude_radius(mag):
     """지진 규모에 따라 원 반지름을 반환합니다."""
     if mag is None:
-        return 3
-    return max(3, int(mag ** 1.8))
+        return 2
+    return max(2, int(mag ** 1.3))
 
 
 def wrap_lons(lon):
