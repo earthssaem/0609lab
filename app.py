@@ -65,6 +65,8 @@ st.markdown("""
         border-right: 3px solid #8b6914 !important;
     }
     [data-testid="stSidebar"] * { color: #e8dcc8 !important; }
+    /* 범례 색상 점은 예외 처리 */
+    [data-testid="stSidebar"] .legend-dot { color: inherit !important; }
     [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
         color: #f0c040 !important;
     }
@@ -355,17 +357,21 @@ with st.sidebar:
     # 범례
     st.markdown("### 📖 지진 규모 범례")
     st.markdown("""
-    <div style='font-size:0.85rem; line-height:2.0'>
-    <span style='color:#4fc3f7 !important; font-size:1.1rem'>●</span>
-    <span style='color:#e8dcc8 !important'> M3 미만 — 미소지진</span><br>
-    <span style='color:#aed581 !important; font-size:1.1rem'>●</span>
-    <span style='color:#e8dcc8 !important'> M3–5 — 약진</span><br>
-    <span style='color:#ffca28 !important; font-size:1.1rem'>●</span>
-    <span style='color:#e8dcc8 !important'> M5–6 — 중진</span><br>
-    <span style='color:#ff7043 !important; font-size:1.1rem'>●</span>
-    <span style='color:#e8dcc8 !important'> M6–7 — 강진</span><br>
-    <span style='color:#e53935 !important; font-size:1.1rem'>●</span>
-    <span style='color:#e8dcc8 !important'> M7 이상 — 대지진</span>
+    <style>
+    .legend-item { font-size:0.85rem; line-height:2.2; display:block; }
+    .dot-blue   { color:#4fc3f7 !important; font-size:1.2rem; }
+    .dot-green  { color:#aed581 !important; font-size:1.2rem; }
+    .dot-yellow { color:#ffca28 !important; font-size:1.2rem; }
+    .dot-orange { color:#ff7043 !important; font-size:1.2rem; }
+    .dot-red    { color:#e53935 !important; font-size:1.2rem; }
+    .leg-text   { color:#e8dcc8 !important; }
+    </style>
+    <div>
+    <span class='legend-item'><span class='dot-blue'>●</span> <span class='leg-text'>M3 미만 — 미소지진</span></span>
+    <span class='legend-item'><span class='dot-green'>●</span> <span class='leg-text'>M3–5 — 약진</span></span>
+    <span class='legend-item'><span class='dot-yellow'>●</span> <span class='leg-text'>M5–6 — 중진</span></span>
+    <span class='legend-item'><span class='dot-orange'>●</span> <span class='leg-text'>M6–7 — 강진</span></span>
+    <span class='legend-item'><span class='dot-red'>●</span> <span class='leg-text'>M7 이상 — 대지진</span></span>
     </div>
     """, unsafe_allow_html=True)
 
