@@ -428,10 +428,11 @@ tile_map = {
 }
 
 m = folium.Map(
-    location=[20, -150],  # 태평양 중심 (-150 = 하와이 근처, 날짜변경선 피함)
+    location=[20, -150],  # 태평양 중심 (하와이 근처)
     zoom_start=2,
     tiles=tile_map[map_style],
-    prefer_canvas=True,   # 성능 최적화
+    prefer_canvas=True,
+    world_copy_jump=True,   # 날짜변경선 양쪽 모두 표시되도록 지도 반복
 )
 
 # ── 레이어 1: 판 경계선 ──────────────────────────
