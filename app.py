@@ -42,13 +42,18 @@ st.markdown("""
     h1 { color: #f0a500 !important; letter-spacing: 1px; }
     h2, h3 { color: #7ec8e3 !important; }
 
-    /* 메트릭 카드 */
+        /* 메트릭 카드 */
     [data-testid="metric-container"] {
-        background: #112233;
-        border: 1px solid #1e3a5f;
-        border-radius: 8px;
-        padding: 12px;
+        background: #112233 !important;
+        border: 1px solid #1e3a5f !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
     }
+    [data-testid="metric-container"],
+    [data-testid="metric-container"] *,
+    [data-testid="metric-container"] p,
+    [data-testid="metric-container"] span,
+    [data-testid="metric-container"] div { color: #ffffff !important; }
     [data-testid="metric-container"] label { color: #7ec8e3 !important; font-size: 0.8rem; }
     [data-testid="metric-container"] [data-testid="stMetricValue"],
     [data-testid="metric-container"] [data-testid="stMetricValue"] * {
