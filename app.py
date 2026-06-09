@@ -457,20 +457,47 @@ m = folium.Map(
 
 # ── 레이어 1: 판 경계선 ──────────────────────────
 if show_plates and plates_geojson:
-    # GeoJSON 좌표 전체에 wrap_lons 적용하여 태평양 중심으로 경도 보정
+    # GeoJSON 좌표 전체에 wrap_lons 적용 + 경도 점프 시 선 분리
     import copy
+
+    def split_line(coords):
+        """경도가 180° 이상 점프하면 선을 끊어 MultiLineString 세그먼트로 반환"""
+        if not coords:
+            return [coords]
+        segments, current = [], [[wrap_lons(coords[0][0]), coords[0][1]]]
+        for lon, lat in coords[1:]:
+            wlon = wrap_lons(lon)
+            if abs(wlon - current[-1][0]) > 180:
+                segments.append(current)
+                current = [[wlon, lat]]
+            else:
+                current.append([wlon, lat])
+        segments.append(current)
+        return [s for s in segments if len(s) >= 2]
+
     plates_wrapped = copy.deepcopy(plates_geojson)
+    new_features = []
     for feature in plates_wrapped["features"]:
         geom = feature["geometry"]
         if geom["type"] == "LineString":
-            geom["coordinates"] = [
-                [wrap_lons(lon), lat] for lon, lat in geom["coordinates"]
-            ]
+            segs = split_line(geom["coordinates"])
+            if len(segs) == 1:
+                geom["coordinates"] = segs[0]
+                new_features.append(feature)
+            else:
+                # 분리된 세그먼트를 MultiLineString으로 변환
+                f2 = copy.deepcopy(feature)
+                f2["geometry"] = {"type": "MultiLineString", "coordinates": segs}
+                new_features.append(f2)
         elif geom["type"] == "MultiLineString":
-            geom["coordinates"] = [
-                [[wrap_lons(lon), lat] for lon, lat in line]
-                for line in geom["coordinates"]
-            ]
+            all_segs = []
+            for line in geom["coordinates"]:
+                all_segs.extend(split_line(line))
+            geom["coordinates"] = all_segs
+            new_features.append(feature)
+        else:
+            new_features.append(feature)
+    plates_wrapped["features"] = new_features
 
     plate_layer = folium.FeatureGroup(name="📏 판 경계선", show=True)
     folium.GeoJson(
